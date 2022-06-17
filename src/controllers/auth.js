@@ -356,13 +356,13 @@ const confirmationEmail = async (req, res) => {
     }
 
     res.writeHead(302, {
-      Location: 'http://localhost:4200/verify-email',
+      Location: 'http://localhost:4200/email',
     });
     return res.end();
   } catch (error) {
     console.log(error);
     res.writeHead(302, {
-      Location: 'http://localhost:4200/verify-email-error',
+      Location: 'http://localhost:4200/email/verify-error',
     });
     return res.end();
   }
