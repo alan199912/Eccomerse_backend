@@ -56,7 +56,7 @@ const sendEmailRecoveryPassword = async (user) => {
         dynamic_template_data: {
           user: user.username,
           subject: `${user.username} Recupera tu contraseña`,
-          recoverURL: `http://localhost:4200/auth/restore-password/${encodeToken}`,
+          recoverURL: `http://localhost:4200/restore-password/${encodeToken}`,
           unsubscribe: `http://localhost:5000/api/v1/auth/unsubscribeAccount/${encodeToken}`,
         },
       },
