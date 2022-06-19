@@ -7,9 +7,9 @@ const jwt = require('jsonwebtoken');
  * - Verify if user is already registered
  */
 const registerUser = async (req, res) => {
-  const { username, email, password, country, phone, name, lastName, discordName } = req.body;
+  const { username, email, password, country, phone, name, lastName } = req.body;
 
-  if (!username || !email || !password || !country || !phone || !name || !lastName || !discordName) {
+  if (!username || !email || !password || !country || !phone || !name || !lastName) {
     return res.status(400).json({
       message: 'All fields are required',
     });
@@ -33,7 +33,6 @@ const registerUser = async (req, res) => {
       phone,
       name,
       lastName,
-      discordName,
     });
 
     if (!user) {

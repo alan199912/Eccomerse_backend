@@ -6,8 +6,7 @@ const bcryptjs = require('bcryptjs');
  * Set new user
  */
 const setUser = async (req, res) => {
-  const { username, email, password, country, phone, name, lastName, discordName, status, roleId } =
-    req.body;
+  const { username, email, password, country, phone, name, lastName, status, roleId } = req.body;
 
   if (
     !username ||
@@ -17,7 +16,6 @@ const setUser = async (req, res) => {
     !phone ||
     !name ||
     !lastName ||
-    !discordName ||
     !status ||
     !roleId
   ) {
@@ -35,7 +33,6 @@ const setUser = async (req, res) => {
       phone,
       name,
       lastName,
-      discordName,
       status,
       roleId,
     });
@@ -258,7 +255,7 @@ const restoreUser = async (req, res) => {
  */
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { username, email, country, phone, name, lastName, discordName } = req.body;
+  const { username, email, country, phone, name, lastName } = req.body;
 
   if (!id) {
     return res.status(400).json({
@@ -270,7 +267,7 @@ const updateUser = async (req, res) => {
     return res.status(400).json({ status: 'error', message: 'The param was required to be a number' });
   }
 
-  if (!username || !email || !country || !phone || !name || !lastName || !discordName) {
+  if (!username || !email || !country || !phone || !name || !lastName) {
     return res.status(400).json({
       message: 'All fields are required',
     });
@@ -278,7 +275,7 @@ const updateUser = async (req, res) => {
 
   try {
     const [codeUserUpdated] = await db.User.update(
-      { username, email, country, phone, name, lastName, discordName },
+      { username, email, country, phone, name, lastName },
       { where: { id } }
     );
 
@@ -317,8 +314,7 @@ const updateUser = async (req, res) => {
  */
 const updateAllDataUser = async (req, res) => {
   const { id } = req.params;
-  const { username, email, country, phone, name, lastName, discordName, password, roleId, status } =
-    req.body;
+  const { username, email, country, phone, name, lastName, password, roleId, status } = req.body;
 
   if (!id) {
     return res.status(400).json({
@@ -339,7 +335,6 @@ const updateAllDataUser = async (req, res) => {
     !phone ||
     !name ||
     !lastName ||
-    !discordName ||
     !password ||
     !roleId ||
     !status
@@ -363,7 +358,6 @@ const updateAllDataUser = async (req, res) => {
         phone,
         name,
         lastName,
-        discordName,
         passwordEncrypted,
         roleId,
         status,
