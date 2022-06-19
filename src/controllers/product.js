@@ -134,7 +134,11 @@ const getProductById = async (req, res) => {
     if (filterId.length > 1) {
       const products = await db.Products.findAll({
         where: { id: filterId },
-        include: db.Products.associations.Category,
+        include: [
+          { model: db.Category },
+          { model: db.MainProductImage },
+          { model: db.RestProductImage },
+        ],
       });
 
       if (!products) {
@@ -148,7 +152,7 @@ const getProductById = async (req, res) => {
     }
 
     const product = await db.Products.findOne({
-      include: db.Products.associations.Category,
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
       where: { id },
     });
 
@@ -217,7 +221,10 @@ const updateProduct = async (req, res) => {
       }
     }
 
-    const productExist = await db.Products.findOne({ where: { id } });
+    const productExist = await db.Products.findOne({
+      where: { id },
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
+    });
 
     if (!productExist) {
       return res.status(400).json({
@@ -362,7 +369,7 @@ const getFeaturedProducts = async (req, res) => {
   try {
     const products = await db.Products.findAll({
       where: { isFeatured: true },
-      include: db.Products.associations.Category,
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
       limit: +limitProducts,
     });
 
@@ -400,7 +407,7 @@ const getProductByCategoryId = async (req, res) => {
   try {
     const products = await db.Products.findAll({
       where: { categoryId: filterCategory },
-      include: db.Products.associations.Category,
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
     });
 
     if (!products) {
@@ -438,7 +445,7 @@ const getFeaturedProductByCategoryId = async (req, res) => {
   try {
     const products = await db.Products.findAll({
       where: { categoryId: filterCategory, isFeatured: true },
-      include: db.Products.associations.Category,
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
       limit: +limitProducts,
     });
 
@@ -464,7 +471,7 @@ const getLatestProductInEachCategoryByLimit = async (req, res) => {
 
   try {
     const products = await db.Products.findAll({
-      include: db.Products.associations.Category,
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
       limit: +limitProducts,
       order: [
         ['createdAt', 'DESC'],
@@ -501,7 +508,11 @@ const getProductsListSortBy = async (req, res) => {
   try {
     if (sortBy === 'featured') {
       const products = await db.Products.findAndCountAll({
-        include: db.Products.associations.Category,
+        include: [
+          { model: db.Category },
+          { model: db.MainProductImage },
+          { model: db.RestProductImage },
+        ],
         where: { isFeatured: sortBy === 'featured' },
         offset: +page,
         limit: +limit,
@@ -520,7 +531,7 @@ const getProductsListSortBy = async (req, res) => {
     }
 
     const products = await db.Products.findAndCountAll({
-      include: db.Products.associations.Category,
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
       order: [['price', sortBy]],
       offset: +page,
       limit: +limit,
@@ -553,7 +564,7 @@ const getProductsListPagination = async (req, res) => {
 
   try {
     const products = await db.Products.findAndCountAll({
-      include: db.Products.associations.Category,
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
       offset: +page,
       limit: +limit,
     });
@@ -584,7 +595,7 @@ const getProductsByName = async (req, res) => {
     const Op = db.Sequelize.Op;
 
     const products = await db.Products.findAndCountAll({
-      include: db.Products.associations.Category,
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
       where: { name: { [Op.like]: `%${name}%` } },
     });
 
@@ -619,7 +630,7 @@ const getProductsListByCategoryIdPagination = async (req, res) => {
   try {
     const products = await db.Products.findAndCountAll({
       where: { categoryId: id },
-      include: db.Products.associations.Category,
+      include: [{ model: db.Category }, { model: db.MainProductImage }, { model: db.RestProductImage }],
       offset: +page,
       limit: +limit,
     });
