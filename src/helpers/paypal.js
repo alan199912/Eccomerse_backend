@@ -25,7 +25,7 @@ const generateTokenPaypal = async () => {
 /**
  * Create checkout order
  */
-const createPayment = async (products, total) => {
+const createPayment = async (products, total, orderId, userId, roleId) => {
   const items = [];
 
   console.log({ products });
@@ -50,14 +50,14 @@ const createPayment = async (products, total) => {
             currency_code: 'USD',
             value: total,
           },
-          description: 'Products Cosmo Group',
+          description: 'Products Eccomerce',
         },
       ],
       application_context: {
-        brand_name: 'cosmogroup',
+        brand_name: 'eccomerce',
         landing_page: 'BILLING',
         user_action: 'PAY_NOW',
-        return_url: 'http://localhost:5000/api/v1/payment/capture',
+        return_url: `http://localhost:5000/api/v1/payment/capture/${orderId}/${userId}/${roleId}`, // todo: here
         cancel_url: 'http://localhost:5000/api/v1/payment/cancel',
       },
     };

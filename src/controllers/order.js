@@ -60,7 +60,13 @@ const setOrder = async (req, res) => {
     // Add order items to order
     order.addOrderItem(items);
 
-    const link = await createPayment(orderItems, total[total.length - 1]);
+    const link = await createPayment(
+      orderItems,
+      total[total.length - 1],
+      order.id,
+      user.id,
+      user.roleId
+    );
 
     console.log({ link });
 

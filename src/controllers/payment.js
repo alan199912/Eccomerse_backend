@@ -6,6 +6,7 @@ const { getUserByEmail } = require('../helpers/user');
 
 const capturePayment = async (req, res) => {
   const { token, PayerID } = req.query;
+  const { orderId, userId, roleId } = req.params;
 
   if (!token || !PayerID) {
     return res.status(400).json({
@@ -26,35 +27,12 @@ const capturePayment = async (req, res) => {
     }
   );
 
-  console.log({ data });
-
   if (data.status === 'COMPLETED') {
     try {
-      const user = await getUserByEmail(data.payer.email_address);
+      const token = await generateTokenOutApplication(userId, roleId);
 
-      // if (!user) {
-      //   throw new Error('Error find user');
-      // }
-
-      const token = await generateTokenOutApplication(user.id, user.roleId);
-
-      const responseOrder = await axios.get(
-        `http://localhost:5000/api/v1/orders/getOrdersByUserId/${user.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // if (!responseOrder.data.order) {
-      //   throw new Error('Error find user');
-      // }
-
-      const order = responseOrder.data.order[responseOrder.data.order.length - 1];
-
-      const updatedOrder = await axios.put(
-        `http://localhost:5000/api/v1/orders/updateOrder/${order.id}`,
+      await axios.put(
+        `http://localhost:5000/api/v1/orders/updateOrder/${orderId}`,
         {
           status: data.status,
           transactionId: data.id,
@@ -69,9 +47,7 @@ const capturePayment = async (req, res) => {
         }
       );
 
-      // if (!updatedOrder.data) {
-      //   throw new Error('not updated order');
-      // }
+      // todo: generate email to order completed
 
       res.writeHead(302, {
         Location: 'http://localhost:4200/dashboard/checkout/complete',
