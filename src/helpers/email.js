@@ -18,15 +18,15 @@ const sendEmailConfirmAccount = async (user) => {
         ],
         dynamic_template_data: {
           user: user.username,
-          subject: `Hola ${user.username} ¡Bienvenido a Cosmo Group!`,
+          subject: `Hi ${user.username} Welcome!`,
           confirmURL: `http://localhost:5000/api/v1/auth/confirmationEmail/${encodeToken}`,
           unsubscribe: `http://localhost:5000/api/v1/auth/unsubscribeAccount/${encodeToken}`,
         },
       },
     ],
     from: {
-      email: 'socialcosmogroup@gmail.com',
-      name: 'Cosmo Group',
+      email: 'alan199912@gmail.com',
+      name: 'Eccomerce',
     },
     template_id: process.env.TEMPLATE_CONFIRM_EMAIL.toString(),
   };
@@ -55,15 +55,15 @@ const sendEmailRecoveryPassword = async (user) => {
         ],
         dynamic_template_data: {
           user: user.username,
-          subject: `${user.username} Recupera tu contraseña`,
+          subject: `${user.username} Recovery password`,
           recoverURL: `http://localhost:4200/restore-password/${encodeToken}`,
           unsubscribe: `http://localhost:5000/api/v1/auth/unsubscribeAccount/${encodeToken}`,
         },
       },
     ],
     from: {
-      email: 'socialcosmogroup@gmail.com',
-      name: 'Recupera tu contraseña',
+      email: 'alan199912@gmail.com',
+      name: 'Recovery password',
     },
     template_id: process.env.TEMPLATE_RECOVERY_PASSWORD.toString(),
   };
@@ -84,8 +84,8 @@ const sendEmailContactUs = async (formData) => {
       {
         to: [
           {
-            email: 'info@cosmogrp.net',
-            name: 'INFO Cosmo Group',
+            email: 'eccomerce@gmail.com',
+            name: 'INFO',
           },
         ],
         dynamic_template_data: {
@@ -97,8 +97,8 @@ const sendEmailContactUs = async (formData) => {
       },
     ],
     from: {
-      email: 'socialcosmogroup@gmail.com',
-      name: 'INFO Cosmo Group',
+      email: 'alan199912@gmail.com',
+      name: 'INFO',
     },
     template_id: process.env.TEMPLATE_CONTACT_US.toString(),
   };
