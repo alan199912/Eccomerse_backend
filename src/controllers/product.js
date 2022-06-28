@@ -183,17 +183,14 @@ const updateProduct = async (req, res) => {
     name,
     description,
     richDescription,
-    image,
-    images,
     brand,
     price,
     categoryId,
     rating,
     isFeatured,
+    mainProductImageId,
+    restProductImageId,
   } = req.body;
-  let fileName;
-  let fileImages;
-  let basePath;
 
   const { id } = req.params;
 
@@ -233,28 +230,18 @@ const updateProduct = async (req, res) => {
       });
     }
 
-    if (req?.files['image']) {
-      fileName = req?.files['image'][0]?.filename;
-      basePath = `${req.protocol}://${req.get('host')}/public/uploads`;
-    }
-
-    if (req?.files['images']) {
-      fileImages = req.files['images'];
-      basePath = `${req.protocol}://${req.get('host')}/public/uploads`;
-    }
-
     const [product] = await db.Products.update(
       {
         name: name || productExist.name,
         description: description || productExist.description,
         richDescription: richDescription || productExist.richDescription,
-        image: basePath || fileName ? `${basePath}/${fileName}` : productExist.image,
-        images: fileImages?.map((f) => `${basePath}/${f.filename}`).toString() || productExist.images,
         brand: brand || productExist.brand,
         price: price || productExist.price,
         categoryId: categoryId || productExist.categoryId,
         rating: rating || productExist.rating,
         isFeatured: isFeatured || productExist.isFeatured,
+        mainProductImageId: mainProductImageId || productExist.mainProductImageId,
+        restProductImageId: restProductImageId || productExist.restProductImageId,
       },
       { where: { id } }
     );
