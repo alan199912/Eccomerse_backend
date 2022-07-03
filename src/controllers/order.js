@@ -381,7 +381,11 @@ const getOrdersByUserId = async (req, res) => {
         {
           model: db.OrderItems,
           attributes: ['productId', 'quantity'],
-          include: { model: db.Products, include: { model: db.Category } },
+          include: {
+            model: db.Products,
+            include: { model: db.Category },
+            include: { model: db.MainProductImage },
+          },
         },
       ],
       attributes: { exclude: ['orderPaypal', 'payerEmail', 'payerId', 'transactionId'] },
