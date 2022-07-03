@@ -101,6 +101,7 @@ const getOrdersList = async (req, res) => {
           include: { model: db.Products, include: { model: db.Category } },
         },
       ],
+      paranoid: false,
     });
 
     if (!orders) {
