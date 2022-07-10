@@ -1,5 +1,6 @@
 const { createOrderItem } = require('../helpers/order');
 const { createPayment } = require('../helpers/paypal');
+const { createMPPayment } = require('../helpers/mp');
 const db = require('../models/index');
 const sequelize = db.sequelize;
 
@@ -7,11 +8,21 @@ const sequelize = db.sequelize;
  * Create an order
  */
 const setOrder = async (req, res) => {
-  const { orderItems, userId } = req.body;
+  const { orderItems, userId, isCard, isPaypal } = req.body;
+
+  console.log(typeof isCard === 'boolean');
+
+  console.log(typeof isPaypal === 'boolean');
 
   if (orderItems.length === 0 || !userId) {
     return res.status(400).json({
       message: 'All fields are required',
+    });
+  }
+
+  if (isCard === isPaypal) {
+    return res.status(400).json({
+      message: 'There are an error when you choice a payment',
     });
   }
 
@@ -60,24 +71,32 @@ const setOrder = async (req, res) => {
     // Add order items to order
     order.addOrderItem(items);
 
-    const link = await createPayment(
-      orderItems,
-      total[total.length - 1],
-      order.id,
-      user.id,
-      user.roleId
-    );
+    if (isPaypal) {
+      const link = await createPayment(
+        orderItems,
+        total[total.length - 1],
+        order.id,
+        user.id,
+        user.roleId
+      );
 
-    console.log({ link });
+      console.log({ link });
 
-    if (link?.status === 'error') {
-      return res.status(400).json({
-        status: 'error',
-        message: link.message,
-      });
+      if (link?.status === 'error') {
+        return res.status(400).json({
+          status: 'error',
+          message: link.message,
+        });
+      }
+
+      return res.status(201).json({ status: 'success', link });
     }
 
-    return res.status(201).json({ status: 'success', link });
+    if (isCard) {
+      const link = await createMPPayment(orderItems, order.id, user.id, user.roleId);
+      console.log('setOrder', { link });
+      return res.status(201).json({ status: 'success', link });
+    }
   } catch (error) {
     console.log({ error });
     return res.status(400).json({

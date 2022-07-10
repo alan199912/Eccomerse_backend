@@ -33,7 +33,7 @@ const createPayment = async (products, total, orderId, userId, roleId) => {
   products.forEach((product) =>
     items.push({
       name: product.name,
-      unit_amount: { value: product.value, currency_code: 'USD' },
+      unit_amount: { value: product.price, currency_code: 'USD' },
       quantity: product.quantity,
       sku: product.code,
     })
